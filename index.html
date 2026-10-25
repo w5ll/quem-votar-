@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz: vote pelas ideias, não pelo rótulo</title>
+<meta name="description" content="Escolha entre propostas de governo sem saber de quem são. No fim, veja com quem você mais concorda. Sem login e sem coleta de dados.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Quiz: vote pelas ideias, não pelo rótulo">
+<meta property="og:description" content="Propostas sem nomes, uma pergunta por vez. No final, você descobre quem propôs o quê.">
+<meta property="og:url" content="https://w5ll.github.io/quem-votar-/">
+<meta property="og:image" content="https://w5ll.github.io/quem-votar-/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quiz: vote pelas ideias, não pelo rótulo">
+<meta name="twitter:description" content="Propostas sem nomes, uma pergunta por vez. No final, você descobre quem propôs o quê.">
+<meta name="twitter:image" content="https://w5ll.github.io/quem-votar-/og.png">
+<meta name="theme-color" content="#050505">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505;--ink:#fafafa;--sec:#a7a6a6;--nav:#b6b5b5;--det:#8b8a8a;
+  --line:rgba(255,255,255,.14);--fill:rgba(255,255,255,.03);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --pt:env(safe-area-inset-top,0px);--pb:env(safe-area-inset-bottom,0px);
+  --pl:env(safe-area-inset-left,0px);--pr:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:17px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+a{color:var(--nav);text-decoration:underline;text-underline-offset:3px}
+[hidden]{display:none!important}
+:focus{outline:none}
+:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* animações */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:no-preference){
+  .rise{opacity:0;animation:rise .7s var(--ease) forwards}
+  .d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}
+}
+.enter{animation:rise .28s var(--ease) both}
+.leave{opacity:0;transform:translateY(-6px);transition:opacity .14s var(--ease),transform .14s var(--ease)}
+
+/* botões */
+.pill{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:999px;
+  background:#fff;color:#050505;font-weight:500;font-size:17px;transition:transform .2s var(--ease),opacity .2s}
+.pill:hover{opacity:.9}.pill:active{transform:scale(.98)}
+.ghost{display:inline-flex;align-items:center;min-height:52px;padding:0 6px;color:var(--ink);font-weight:500;font-size:17px;opacity:.9}
+.ghost:hover{opacity:1}
+.ghost.line{border:1px solid var(--line);border-radius:999px;padding:0 24px;justify-content:center}
+
+/* ===== CAPA: pergunta 1 sobre o vídeo ===== */
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;display:none;background:var(--bg)}
+body.cover .stage{display:block}
+.vwrap{position:absolute;inset:0}
+.vwrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:43% center;opacity:0;transition:opacity 1.2s var(--ease)}
+.vwrap video.on{opacity:1}
+.vshade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(5,5,5,0) 58%,#050505 97%),linear-gradient(rgba(5,5,5,.62),rgba(5,5,5,.62))}
+.top{display:none;position:relative;grid-template-columns:1fr auto;align-items:center;min-height:56px}
+body.cover .top{display:grid}
+.logo{display:block;width:24px;height:37px}
+.toplink{display:none;color:var(--nav);font-size:19px}
+.toplink:hover{color:#fff}
+.burger{justify-self:end;width:48px;height:48px;border-radius:999px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.burger i{display:block;width:18px;height:1.5px;background:#fff;border-radius:1px}
+body.cover #quiz .col{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+body.cover #qwrap{margin:auto 0}
+body.cover .tema{margin-top:8px}
+.tema.intro{color:var(--sec)}
+.coverfoot{display:none}
+.priv{display:none}
+body.cover .priv:not(:empty){display:block}
+body.cover .coverfoot{display:block}
+body.cover .qfoot{margin-top:22px}
+body.cover .qfoot+.qfoot{margin-top:8px}
+body.tight .opt{font-size:16px;padding:14px 18px;min-height:56px;margin-bottom:10px}
+body.tight #pergunta{font-size:clamp(24px,6.4vw,32px);margin-bottom:18px}
+body.tight .top{min-height:44px}
+body.tight .qbar{min-height:40px;margin-top:0}
+body.tight .tema{margin-bottom:6px}
+body.tight .opt .l{margin-bottom:4px}
+body.tight .skip{min-height:48px;margin-top:0}
+body.tight.cover .qfoot{margin-top:12px}
+@media(min-width:900px){
+  .vwrap{transform:translateX(30vw);
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%);
+    mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%)}
+  .vwrap video{object-position:center}
+  .toplink{display:block;justify-self:end}
+  .burger{display:none}
+  .logo{width:28px;height:43px}
+}
+
+/* menu em tela cheia */
+#menu{position:fixed;inset:0;z-index:50;background:rgba(5,5,5,.97);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  overflow-y:auto;padding:calc(20px + var(--pt)) calc(24px + var(--pr)) calc(40px + var(--pb)) calc(24px + var(--pl));
+  opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s}
+#menu.open{opacity:1;visibility:visible}
+.menuin{max-width:640px;margin:0 auto}
+.menutop{display:flex;justify-content:flex-end;margin-bottom:12px}
+.x{width:48px;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:22px;line-height:1}
+#menu h2{font-size:clamp(28px,7vw,40px);font-weight:400;margin:28px 0 12px;letter-spacing:.2px}
+#menu p{color:var(--sec);margin:0 0 14px}
+#menu ol{color:var(--sec);margin:0 0 14px;padding-left:22px}
+#menu li{margin-bottom:10px}
+#menu .fine{color:var(--det);font-size:15px;border-top:1px solid var(--line);padding-top:16px;margin-top:32px}
+
+/* ===== PERGUNTAS / RESULTADO ===== */
+.screen{min-height:100vh;min-height:100dvh;position:relative}
+.screen::before{content:"";position:absolute;inset:0 0 auto 0;height:180px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,.045),rgba(255,255,255,0))}
+.col{position:relative;max-width:640px;margin:0 auto;padding:calc(18px + var(--pt)) calc(20px + var(--pr)) calc(40px + var(--pb)) calc(20px + var(--pl))}
+#quiz .col{max-width:560px}
+#prog{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,.1);z-index:20}
+#prog i{display:block;height:100%;width:0;background:#fff;transition:width .4s var(--ease)}
+.qbar{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin-top:6px}
+.back{color:var(--det);font-size:16px;min-height:48px;padding:0 12px 0 0}
+.back:hover{color:#fff}
+.count{color:var(--det);font-size:16px}
+.tema{color:var(--det);font-size:16px;margin:28px 0 10px;letter-spacing:.02em}
+#pergunta{font-weight:500;font-size:clamp(25px,6.6vw,34px);line-height:1.22;margin:0 0 26px;letter-spacing:.1px}
+.opt{display:block;width:100%;text-align:left;min-height:64px;padding:18px 20px;margin-bottom:14px;
+  border:1px solid var(--line);background:var(--fill);border-radius:16px;font-size:18px;line-height:1.5;
+  transition:border-color .2s var(--ease),background .2s var(--ease)}
+.opt:hover{border-color:rgba(255,255,255,.4)}
+.opt .l{display:block;color:var(--det);font-size:14px;font-weight:700;letter-spacing:.14em;margin-bottom:8px}
+.opt.sel{border-color:#fff;background:rgba(255,255,255,.07)}
+.skip{display:flex;align-items:center;justify-content:center;min-height:52px;margin:6px auto 0;padding:0 24px;border-radius:999px;
+  color:var(--sec);border:1px solid transparent;font-size:16px}
+.skip:hover{color:#fff;border-color:var(--line)}
+.skip.sel{color:#fff;border-color:#fff}
+.qfoot{color:var(--det);font-size:14px;margin-top:36px}
+
+#fim h1{font-size:clamp(32px,8.5vw,48px);font-weight:500;margin:26px 0 22px}
+#fim h2{font-weight:500;font-size:clamp(22px,5.6vw,28px);margin:44px 0 16px}
+.card{background:var(--fill);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+.card .nm{font-weight:500;font-size:19px}
+.card .big{display:flex;justify-content:space-between;align-items:baseline;margin:10px 0 14px;color:var(--sec);font-size:16px}
+.card .big b{color:var(--ink);font-weight:500;font-size:34px;letter-spacing:.2px}
+.track{height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.track i{display:block;height:100%;width:0;background:#e9e9e9;border-radius:2px;transition:width 1s var(--ease)}
+.note{color:var(--sec);font-size:16px;margin:6px 0 0}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:26px 0 0}
+.item{background:var(--fill);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.item .q{font-weight:500;font-size:17px;margin-bottom:12px}
+.side{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-top:10px;font-size:16px}
+.side.me{border-color:#fff}
+.side .who{font-weight:700;display:flex;justify-content:space-between;gap:10px}
+.side .who em{font-style:normal;font-weight:400;color:var(--sec)}
+.side p{margin:6px 0 8px;color:#e4e4e4}
+.side small{display:block;color:var(--det);font-size:14px;line-height:1.7}
+.item .sk{color:var(--det);font-size:14px;margin-top:10px}
+.aviso{color:var(--det);font-size:14px;line-height:1.6;margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}
+#toast{position:fixed;left:50%;bottom:calc(24px + var(--pb));transform:translate(-50%,20px);background:#fff;color:#050505;font-weight:500;
+  padding:12px 20px;border-radius:999px;font-size:16px;opacity:0;pointer-events:none;transition:all .3s var(--ease);z-index:60}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="live" class="sr" aria-live="polite" aria-atomic="true"></div>
+
+<!-- VÍDEO DE FUNDO (só na pergunta 1) -->
+<div class="stage" id="stage" aria-hidden="true">
+  <div class="vwrap">
+    <video id="vid" autoplay muted loop playsinline preload="metadata" tabindex="-1"
+      poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%23050505'/%3E%3C/svg%3E">
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4" type="video/mp4">
+    </video>
+    <script>
+    // Sem vídeo em economia de dados ou movimento reduzido: só o fundo preto.
+    (function(){var c=navigator.connection||{},r=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(c.saveData||r){var v=document.getElementById("vid");if(v&&v.parentNode)v.parentNode.removeChild(v)}})();
+    </script>
+  </div>
+  <div class="vshade"></div>
+</div>
+
+<!-- MENU -->
+<div id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+  <div class="menuin">
+    <div class="menutop"><button class="x" id="xclose" type="button" aria-label="Fechar menu">✕</button></div>
+    <h2 id="como">Como funciona</h2>
+    <ol>
+      <li>Você lê duas propostas sem nomes.</li>
+      <li>Escolhe a que mais concorda, ou marca "Não sei".</li>
+      <li>No final vê a afinidade e quem propôs cada uma, com fonte.</li>
+    </ol>
+    <h2 id="fontes">Fontes e metodologia</h2>
+    <p>As propostas vêm dos planos de governo registrados no TSE, de reportagens sobre eles e de entrevistas dos candidatos, e foram generalizadas para não revelar o autor. A ordem A/B é sorteada a cada pergunta.</p>
+    <p>Cada candidatura tem o mesmo número de propostas por tema. O resultado é só a contagem das suas escolhas, sem pesos. "Não sei" não conta para ninguém.</p>
+    <p class="fine">Este quiz não é recomendação de voto. Pesquise e decida por conta própria.<br>Sem login e sem cookies. Ao terminar, suas escolhas (só elas, sem nome, IP ou qualquer identificação) são contadas de forma anônima para estatísticas do quiz.</p>
+  </div>
+</div>
+
+<!-- PERGUNTAS (a pergunta 1 é a capa) -->
+<section id="quiz" class="screen" aria-label="Quiz">
+  <div id="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
+  <div class="col">
+    <header class="top">
+      <svg class="logo" viewBox="0 0 31.5 48.5" role="img" aria-label="Em quem votar?" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="bg1" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="34.1" y2="28.9">
+          <stop offset="0" stop-color="#9e9e9e"/><stop offset=".28" stop-color="#a6a6a6"/><stop offset=".34" stop-color="#a3a3a3"/>
+          <stop offset=".40" stop-color="#3a3a3a"/><stop offset=".55" stop-color="#414141"/><stop offset=".60" stop-color="#7a7a7a"/>
+          <stop offset=".68" stop-color="#8e8e8e"/><stop offset=".80" stop-color="#a9a9a9"/><stop offset=".95" stop-color="#c4c4c4"/>
+          <stop offset="1" stop-color="#ccc"/></linearGradient></defs>
+        <path d="M21.5 0 L21.5 19.5 L31.5 19.5 L31.5 29 L10 48.5 L10 28.5 L0.5 28.5 L0.5 18.5 Z" fill="url(#bg1)"/>
+        <rect x="0.5" y="18.5" width="9" height="10" fill="#fdfdfd"/>
+        <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd"/>
+      </svg>
+      <button class="toplink" id="toplink" type="button" data-open="como">Como funciona</button>
+      <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-haspopup="dialog" aria-controls="menu"><i></i><i></i></button>
+    </header>
+    <div class="qbar">
+      <button class="back" id="back" type="button" aria-label="Voltar para a pergunta anterior">← Voltar</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div id="qwrap">
+      <p class="tema rise d1" id="tema"></p>
+      <h2 id="pergunta" class="rise d2" tabindex="-1"></h2>
+      <div id="opts" class="rise d3"></div>
+    </div>
+    <p class="qfoot coverfoot"><span id="nq"></span> perguntas · ~3 min · só no fim você vê quem propôs o quê</p>
+    <p class="qfoot">Este quiz não é recomendação de voto. Pesquise e decida por conta própria.</p>
+    <p class="qfoot priv">Sem login e sem cookies. Suas escolhas são contadas de forma anônima, sem nome, IP ou identificação.</p>
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section id="fim" class="screen" hidden aria-label="Resultado">
+  <div class="col">
+    <h1 id="rtitle" tabindex="-1">Seu resultado</h1>
+    <div id="resumo"></div>
+    <p class="note">O resultado é só a contagem das suas escolhas, sem pesos. Itens marcados "Não sei" não entram na conta.</p>
+    <div class="actions">
+      <button class="pill" id="redo" type="button">Refazer</button>
+      <button class="ghost line" id="share1" type="button">Compartilhar o quiz</button>
+    </div>
+    <h2>Suas escolhas e quem propôs</h2>
+    <div id="lista"></div>
+    <p class="aviso">Este quiz não é recomendação de voto. Pesquise e decida por conta própria. As propostas foram resumidas e generalizadas; para o texto completo, consulte os planos de governo registrados no <a href="https://www.tse.jus.br/eleicoes/eleicoes-2026-content/propostas-de-governo-dos-candidatos-ao-cargo-de-presidente-da-republica-eleicoes-2026-segundo-turno" target="_blank" rel="noopener">TSE</a>. Suas escolhas foram contadas de forma anônima, sem identificar você.</p>
+  </div>
+</section>
+
+<div id="toast" role="status"></div>
+
+<script>
+const D=[{"id": "q01", "tema": "Ensino técnico", "p": "Como ampliar o ensino técnico?", "s": [{"t": "Criar escolas federais técnicas e superiores no interior, nas periferias e em regiões sem oferta de ensino.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Criar cursos técnicos no ensino médio, em parceria com empresas, para as profissões que o mercado mais procura.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl0sIFsiQUJDIGRvIEFCQywgMTkvMDgvMjAyNiIsICJodHRwczovL2FiY2RvYWJjLmNvbS5ici9lbGVpY29lcy0yMDI2LXNhaWJhLXBsYW5vcy1nb3Zlcm5vLWx1bGEtZmxhdmlvIl1d"}], "w": "TEY="}, {"id": "q02", "tema": "Impostos", "p": "Qual caminho para os impostos você prefere?", "s": [{"t": "Adotar tributação maior sobre rendas muito altas, com isenção do imposto de renda para quem ganha menos.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkdhemV0YSBkbyBQb3ZvLCAxNy8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmdhemV0YWRvcG92by5jb20uYnIvZWxlaWNvZXMvMjAyNi9wbGFuby1kZS1nb3Zlcm5vLWx1bGEtZWNvbm9taWEvIl0sIFsiTWl4IFZhbGUsIDIyLzEwLzIwMjYiLCAiaHR0cHM6Ly93d3cubWl4dmFsZS5jb20uYnIvMjAyNi8xMC8yMi9wbGFub3MtZGUtZ292ZXJuby1kZS1sdWxhLWUtZmxhdmlvLWJvbHNvbmFyby1uby10c2UtZGV0YWxoYW0tcmVncmFzLXBhcmEtY2x0LW1laS1pbnNzLWUtbW9yYWRpYS1hdGUtMjAzMC8iXV0="}, {"t": "Adotar alíquotas menores sobre consumo e produção, com redução geral de tributos acompanhada de menos gastos.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkluZm9Nb25leSwgMTMvMTAvMjAyNiIsICJodHRwczovL3d3dy5pbmZvbW9uZXkuY29tLmJyL3BvbGl0aWNhL28tcXVlLW11ZGEtbmEtZWNvbm9taWEtY29tLWZsYXZpby12ZWphLWFzLXByb3Bvc3Rhcy1hcHJlc2VudGFkYXMtcGVsby1jYW5kaWRhdG8vIl0sIFsiQWfDqm5jaWEgQnJhc2lsLCAxOC8wOS8yMDI2IiwgImh0dHBzOi8vYWdlbmNpYWJyYXNpbC5lYmMuY29tLmJyL3BvbGl0aWNhL25vdGljaWEvMjAyNi0wOS9mbGF2aW8tYm9sc29uYXJvLXByb3BvZS1lbnh1Z2FyLWVzdGFkby1lLWVuZHVyZWNlci1hY29lcy1kZS1zZWd1cmFuY2EiXV0="}], "w": "TEY="}, {"id": "q03", "tema": "Contas públicas", "p": "Como o governo deve controlar os gastos?", "s": [{"t": "Estabelecer uma nova regra para o gasto público, com corte de despesas para equilibrar as contas e baixar os juros.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkluZm9Nb25leSwgMTMvMTAvMjAyNiIsICJodHRwczovL3d3dy5pbmZvbW9uZXkuY29tLmJyL3BvbGl0aWNhL28tcXVlLW11ZGEtbmEtZWNvbm9taWEtY29tLWZsYXZpby12ZWphLWFzLXByb3Bvc3Rhcy1hcHJlc2VudGFkYXMtcGVsby1jYW5kaWRhdG8vIl0sIFsiQWfDqm5jaWEgQnJhc2lsLCAxOC8wOS8yMDI2IiwgImh0dHBzOi8vYWdlbmNpYWJyYXNpbC5lYmMuY29tLmJyL3BvbGl0aWNhL25vdGljaWEvMjAyNi0wOS9mbGF2aW8tYm9sc29uYXJvLXByb3BvZS1lbnh1Z2FyLWVzdGFkby1lLWVuZHVyZWNlci1hY29lcy1kZS1zZWd1cmFuY2EiXV0="}, {"t": "Estabelecer um limite para o crescimento do gasto público, com alta real moderada, e meta de superávit até 2030.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkluZm9Nb25leSwgMTMvMTAvMjAyNiIsICJodHRwczovL3d3dy5pbmZvbW9uZXkuY29tLmJyL3BvbGl0aWNhL28tcXVlLWx1bGEtamEtcHJvbWV0ZXUtcGFyYS1hLWVjb25vbWlhLXNlLWNvbnF1aXN0YXItYS1yZWVsZWljYW8vIl0sIFsiR2F6ZXRhIGRvIFBvdm8sIDE3LzA4LzIwMjYiLCAiaHR0cHM6Ly93d3cuZ2F6ZXRhZG9wb3ZvLmNvbS5ici9lbGVpY29lcy8yMDI2L3BsYW5vLWRlLWdvdmVybm8tbHVsYS1lY29ub21pYS8iXV0="}], "w": "Rkw="}, {"id": "q04", "tema": "Emprego", "p": "Qual medida para o trabalho você prefere?", "s": [{"t": "Instituir contratos de menor custo para jovens no primeiro emprego e para desempregados há muito tempo acima de 50 anos.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIk1peCBWYWxlLCAyMi8xMC8yMDI2IiwgImh0dHBzOi8vd3d3Lm1peHZhbGUuY29tLmJyLzIwMjYvMTAvMjIvcGxhbm9zLWRlLWdvdmVybm8tZGUtbHVsYS1lLWZsYXZpby1ib2xzb25hcm8tbm8tdHNlLWRldGFsaGFtLXJlZ3Jhcy1wYXJhLWNsdC1tZWktaW5zcy1lLW1vcmFkaWEtYXRlLTIwMzAvIl1d"}, {"t": "Instituir regras para o trabalho por aplicativo, com direitos e clareza nos critérios de pagamento e bloqueio.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl0sIFsiTWl4IFZhbGUsIDIyLzEwLzIwMjYiLCAiaHR0cHM6Ly93d3cubWl4dmFsZS5jb20uYnIvMjAyNi8xMC8yMi9wbGFub3MtZGUtZ292ZXJuby1kZS1sdWxhLWUtZmxhdmlvLWJvbHNvbmFyby1uby10c2UtZGV0YWxoYW0tcmVncmFzLXBhcmEtY2x0LW1laS1pbnNzLWUtbW9yYWRpYS1hdGUtMjAzMC8iXV0="}], "w": "Rkw="}, {"id": "q05", "tema": "Programas sociais", "p": "O que fazer com a assistência social?", "s": [{"t": "Criar uma rede pública de apoio às famílias, com cuidado infantil, lavanderias, cozinhas comunitárias e restaurantes populares.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Priorizar beneficiários em cursos e no primeiro emprego, com retorno imediato ao benefício se o emprego não der certo.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIk1peCBWYWxlLCAyMi8xMC8yMDI2IiwgImh0dHBzOi8vd3d3Lm1peHZhbGUuY29tLmJyLzIwMjYvMTAvMjIvcGxhbm9zLWRlLWdvdmVybm8tZGUtbHVsYS1lLWZsYXZpby1ib2xzb25hcm8tbm8tdHNlLWRldGFsaGFtLXJlZ3Jhcy1wYXJhLWNsdC1tZWktaW5zcy1lLW1vcmFkaWEtYXRlLTIwMzAvIl0sIFsiSW5mb01vbmV5LCAxMy8xMC8yMDI2IiwgImh0dHBzOi8vd3d3LmluZm9tb25leS5jb20uYnIvcG9saXRpY2Evby1xdWUtbXVkYS1uYS1lY29ub21pYS1jb20tZmxhdmlvLXZlamEtYXMtcHJvcG9zdGFzLWFwcmVzZW50YWRhcy1wZWxvLWNhbmRpZGF0by8iXV0="}], "w": "TEY="}, {"id": "q06", "tema": "Saúde", "p": "Qual proposta para a saúde pública você prefere?", "s": [{"t": "Atualizar o valor pago por atendimento e contratar exames na rede privada em horários ociosos para encurtar filas.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdXQ=="}, {"t": "Enviar médicos a regiões carentes e fornecer remédios gratuitos ou baratos, com inteligência artificial na triagem.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}], "w": "Rkw="}, {"id": "q07", "tema": "Educação básica", "p": "Qual prioridade para a escola você prefere?", "s": [{"t": "Criar vagas em escola de tempo integral e pagar incentivo em dinheiro a alunos de baixa renda que concluem o ensino médio.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Adotar o método fônico na alfabetização e dar às famílias um vale para creche particular onde faltar vaga pública.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl1d"}], "w": "TEY="}, {"id": "q08", "tema": "Segurança pública", "p": "Qual estratégia contra o crime organizado você prefere?", "s": [{"t": "Criar um ministério dedicado à segurança pública, integrar União, estados e municípios e bloquear o dinheiro do crime organizado.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Classificar facções como organizações terroristas, construir presídios de segurança máxima e endurecer penas de crimes hediondos.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkdhemV0YSBkbyBQb3ZvLCAxOS8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmdhemV0YWRvcG92by5jb20uYnIvZWxlaWNvZXMvMjAyNi9wcm9wb3N0YXMtZmxhdmlvLWJvbHNvbmFyby1wbGFuby1kZS1nb3Zlcm5vLXNlZ3VyYW5jYS1wdWJsaWNhLyJdXQ=="}], "w": "TEY="}, {"id": "q09", "tema": "Tecnologia na segurança", "p": "Que uso de câmeras na segurança você prefere?", "s": [{"t": "Instalar câmeras com reconhecimento facial em rede nacional, ligadas aos bancos de dados criminais.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkdhemV0YSBkbyBQb3ZvLCAxOS8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmdhemV0YWRvcG92by5jb20uYnIvZWxlaWNvZXMvMjAyNi9wcm9wb3N0YXMtZmxhdmlvLWJvbHNvbmFyby1wbGFuby1kZS1nb3Zlcm5vLXNlZ3VyYW5jYS1wdWJsaWNhLyJdXQ=="}, {"t": "Adotar câmeras no uniforme dos policiais, com regras nacionais iguais para todos os estados.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}], "w": "Rkw="}, {"id": "q10", "tema": "Armas", "p": "Qual regra para armas de fogo você prefere?", "s": [{"t": "Estabelecer acesso a armas para cidadãos que cumprem os requisitos legais, para defesa da família e do patrimônio.", "f": "W1siTkQgTWFpcywgc29icmUgZW50cmV2aXN0YSDDoCBUViBHbG9ibyBkZSAxNi8xMC8yMDI2IiwgImh0dHBzOi8vbmRtYWlzLmNvbS5ici9wb2xpdGljYS9uaW5ndWVtLWVzdGEtZGVmZW5kZW5kby1vLWZhcm9lc3RlLWZsYXZpby1kaXotcXVlLXByb2JsZW1hLWRhLXNlZ3VyYW5jYS1lLWFybWEtbmFzLW1hb3MtZXJyYWRhcy8iXV0="}, {"t": "Adotar controle rigoroso de armas e munições, com rastreamento e fiscalização e combate ao tráfico de armas.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}], "w": "Rkw="}, {"id": "q11", "tema": "Meio ambiente", "p": "Qual política ambiental você prefere?", "s": [{"t": "Simplificar o licenciamento ambiental, com aprovação automática se o órgão não responder no prazo.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl1d"}, {"t": "Estabelecer meta de desmatamento líquido zero até 2030 e incluir a adaptação ao clima no planejamento do governo.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}], "w": "Rkw="}, {"id": "q12", "tema": "Agronegócio", "p": "Que apoio ao campo você prefere?", "s": [{"t": "Oferecer crédito à agricultura familiar e comprar de pequenos produtores parte da merenda escolar.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Criar corredores de transporte para baratear o frete de alimentos, com mais armazéns de safra e fertilizantes nacionais.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl1d"}], "w": "TEY="}, {"id": "q13", "tema": "Política externa", "p": "Qual rumo nas relações com outros países?", "s": [{"t": "Priorizar a integração com a América do Sul e a aproximação com países africanos, com respeito à não intervenção.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl1d"}, {"t": "Priorizar parcerias com Estados Unidos, Argentina e Israel, entrada na OCDE e abertura gradual do comércio.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdLCBbIlJlc3VtbyBjb20gcMOhZ2luYXM6IHBsYW5vZGVnb3Zlcm5vMjAyNi5jb20uYnIiLCAiaHR0cHM6Ly9wbGFub2RlZ292ZXJubzIwMjYuY29tLmJyL2NhbmRpZGF0b3MvcHJlc2lkZW50ZS9mbGF2aW8tYm9sc29uYXJvLyJdXQ=="}], "w": "TEY="}, {"id": "q14", "tema": "Papel do Estado", "p": "Qual tamanho de Estado você prefere?", "s": [{"t": "Investir recursos públicos em obras e em setores industriais estratégicos, com o Estado como indutor do crescimento.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkdhemV0YSBkbyBQb3ZvLCAxNy8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmdhemV0YWRvcG92by5jb20uYnIvZWxlaWNvZXMvMjAyNi9wbGFuby1kZS1nb3Zlcm5vLWx1bGEtZWNvbm9taWEvIl0sIFsiSW5mb01vbmV5LCAxMy8xMC8yMDI2IiwgImh0dHBzOi8vd3d3LmluZm9tb25leS5jb20uYnIvcG9saXRpY2Evby1xdWUtbHVsYS1qYS1wcm9tZXRldS1wYXJhLWEtZWNvbm9taWEtc2UtY29ucXVpc3Rhci1hLXJlZWxlaWNhby8iXV0="}, {"t": "Adotar uma máquina pública menor, com ao menos dez ministérios a menos, e venda de estatais caso a caso.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl0sIFsiSW5mb01vbmV5LCAxMy8xMC8yMDI2IiwgImh0dHBzOi8vd3d3LmluZm9tb25leS5jb20uYnIvcG9saXRpY2Evby1xdWUtbXVkYS1uYS1lY29ub21pYS1jb20tZmxhdmlvLXZlamEtYXMtcHJvcG9zdGFzLWFwcmVzZW50YWRhcy1wZWxvLWNhbmRpZGF0by8iXV0="}], "w": "TEY="}, {"id": "q15", "tema": "Corrupção e transparência", "p": "Como proteger o dinheiro público?", "s": [{"t": "Adotar escolha técnica de dirigentes de estatais e fundos de pensão, sem indicação política, e limite a supersalários.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIlJlc3VtbyBjb20gcMOhZ2luYXM6IHBsYW5vZGVnb3Zlcm5vMjAyNi5jb20uYnIiLCAiaHR0cHM6Ly9wbGFub2RlZ292ZXJubzIwMjYuY29tLmJyL2NhbmRpZGF0b3MvcHJlc2lkZW50ZS9mbGF2aW8tYm9sc29uYXJvLyJdXQ=="}, {"t": "Adotar transparência sobre emendas parlamentares e participação popular na definição do orçamento.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvLCAwOC8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmNvbmdyZXNzb2VtZm9jby5jb20uYnIvbm90aWNpYS8xMjExMjEvcHQtcmVnaXN0cmEtbm92by1wbGFuby1kZS1nb3Zlcm5vLWRlLWx1bGEtbm8tdHNlLXZlamEtYS1pbnRlZ3JhIl0sIFsiR2F6ZXRhIGRvIFBvdm8sIDE3LzA4LzIwMjYiLCAiaHR0cHM6Ly93d3cuZ2F6ZXRhZG9wb3ZvLmNvbS5ici9lbGVpY29lcy8yMDI2L3BsYW5vLWRlLWdvdmVybm8tbHVsYS1lY29ub21pYS8iXV0="}], "w": "Rkw="}, {"id": "q16", "tema": "Energia e combustíveis", "p": "Qual caminho para energia e combustíveis?", "s": [{"t": "Priorizar a estatal de petróleo como executora da política energética, em refino, gás, fertilizantes e biocombustíveis.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIlRBR0QvQk5BbWVyaWNhcywgMjAvMDgvMjAyNiIsICJodHRwczovL3RhZ2RsYXcuY29tLmJyL3BsYW5vcy1kZS1sdWxhLWUtYm9sc29uYXJvLW1hbnRlbS1vbGVvLWUtZ2FzLW5vLWNlbnRyby1kYS1zZWd1cmFuY2EtZW5lcmdldGljYS8iXSwgWyJHYXpldGEgZG8gUG92bywgMTcvMDgvMjAyNiIsICJodHRwczovL3d3dy5nYXpldGFkb3Bvdm8uY29tLmJyL2VsZWljb2VzLzIwMjYvcGxhbm8tZGUtZ292ZXJuby1sdWxhLWVjb25vbWlhLyJdXQ=="}, {"t": "Priorizar menos impostos sobre luz e combustíveis, gás por fraturamento de rochas e o Estado como regulador do setor.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFnw6puY2lhIEJyYXNpbCwgMTgvMDkvMjAyNiIsICJodHRwczovL2FnZW5jaWFicmFzaWwuZWJjLmNvbS5ici9wb2xpdGljYS9ub3RpY2lhLzIwMjYtMDkvZmxhdmlvLWJvbHNvbmFyby1wcm9wb2UtZW54dWdhci1lc3RhZG8tZS1lbmR1cmVjZXItYWNvZXMtZGUtc2VndXJhbmNhIl0sIFsiVEFHRC9CTkFtZXJpY2FzLCAyMC8wOC8yMDI2IiwgImh0dHBzOi8vdGFnZGxhdy5jb20uYnIvcGxhbm9zLWRlLWx1bGEtZS1ib2xzb25hcm8tbWFudGVtLW9sZW8tZS1nYXMtbm8tY2VudHJvLWRhLXNlZ3VyYW5jYS1lbmVyZ2V0aWNhLyJdXQ=="}], "w": "TEY="}, {"id": "q17", "tema": "Dívidas das famílias", "p": "Como ajudar quem está endividado?", "s": [{"t": "Comprar dívidas atrasadas e refinanciá-las em banco público, com juros menores, prazo maior e carência de seis a doze meses.", "f": "W1siSW5mb01vbmV5LCAxMy8xMC8yMDI2IiwgImh0dHBzOi8vd3d3LmluZm9tb25leS5jb20uYnIvcG9saXRpY2Evby1xdWUtbXVkYS1uYS1lY29ub21pYS1jb20tZmxhdmlvLXZlamEtYXMtcHJvcG9zdGFzLWFwcmVzZW50YWRhcy1wZWxvLWNhbmRpZGF0by8iXV0="}, {"t": "Oferecer renegociação com condições especiais de dívidas de cartão, cheque especial e empréstimos para famílias de até cinco salários mínimos.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkluZm9Nb25leSwgMTMvMTAvMjAyNiIsICJodHRwczovL3d3dy5pbmZvbW9uZXkuY29tLmJyL3BvbGl0aWNhL28tcXVlLWx1bGEtamEtcHJvbWV0ZXUtcGFyYS1hLWVjb25vbWlhLXNlLWNvbnF1aXN0YXItYS1yZWVsZWljYW8vIl1d"}], "w": "Rkw="}, {"id": "q18", "tema": "Violência contra a mulher", "p": "Qual medida contra a violência contra a mulher você prefere?", "s": [{"t": "Garantir salário igual para homens e mulheres na mesma função e mutirões com os estados para prender agressores.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdLCBbIkNvbmdyZXNzbyBlbSBGb2NvIChjb252ZW7Dp8OjbykiLCAiaHR0cHM6Ly93d3cuY29uZ3Jlc3NvZW1mb2NvLmNvbS5ici9ub3RpY2lhLzExNTY3OC9sdWxhLS1xdWVtLWJhdGVyLWVtLW11bGhlci1uYW8tcHJlY2lzYS12b3Rhci1lbS1taW0iXV0="}, {"t": "Exigir tornozeleira de agressores com medida protetiva e cumprimento integral da pena por quem mata mulheres.", "f": "W1siUGxhbm8gbm8gVFNFIiwgImh0dHBzOi8vd3d3LnRzZS5qdXMuYnIvZWxlaWNvZXMvZWxlaWNvZXMtMjAyNi1jb250ZW50L3Byb3Bvc3Rhcy1kZS1nb3Zlcm5vLWRvcy1jYW5kaWRhdG9zLWFvLWNhcmdvLWRlLXByZXNpZGVudGUtZGEtcmVwdWJsaWNhLWVsZWljb2VzLTIwMjYtc2VndW5kby10dXJubyJdLCBbIkdhemV0YSBkbyBQb3ZvLCAxOS8wOC8yMDI2IiwgImh0dHBzOi8vd3d3LmdhemV0YWRvcG92by5jb20uYnIvZWxlaWNvZXMvMjAyNi9wcm9wb3N0YXMtZmxhdmlvLWJvbHNvbmFyby1wbGFuby1kZS1nb3Zlcm5vLXNlZ3VyYW5jYS1wdWJsaWNhLyJdLCBbIkFCQyBkbyBBQkMsIDE5LzA4LzIwMjYiLCAiaHR0cHM6Ly9hYmNkb2FiYy5jb20uYnIvZWxlaWNvZXMtMjAyNi1zYWliYS1wbGFub3MtZ292ZXJuby1sdWxhLWZsYXZpbyJdXQ=="}], "w": "TEY="}];
+const N={"L": "THVsYSAoUFQp", "F": "RmzDoXZpbyBCb2xzb25hcm8gKFBMKQ=="};
+const dec=s=>decodeURIComponent(escape(atob(s)));
+const URL_Q="https://w5ll.github.io/quem-votar-/";
+const $=id=>document.getElementById(id);
+const REDUCED=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ENDPOINT="https://script.google.com/macros/s/AKfycbyi3xktKI_ELFiUr9rriVCJEP6_THIrGCzUef1LuGnitCWCXgPSxrESsAlv1TWMG87V0w/exec";
+let i=0,ans=[],ord=[],busy=false,started=false;
+/* Contagem anônima: só as escolhas (L/F/S por pergunta). Sem cookies, IP, ID ou horário exato. */
+function send(o){
+  if(!ENDPOINT)return;
+  try{fetch(ENDPOINT,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).catch(()=>{})}catch(e){}
+}
+$("nq").textContent=D.length;
+
+/* vídeo: só na abertura */
+const vid=$("vid");
+if(vid){
+  const on=()=>vid.classList.add("on");
+  vid.addEventListener("playing",on);vid.addEventListener("loadeddata",on);
+  vid.addEventListener("error",()=>vid.remove());
+}
+function heroVideo(play){if(!vid||!vid.isConnected)return;try{play?vid.play&&vid.play().catch(()=>{}):vid.pause()}catch(e){}}
+
+function show(id){
+  ["quiz","fim"].forEach(x=>$(x).hidden=x!==id);
+  $("prog").style.display=id==="quiz"?"block":"none";
+  if(id!=="quiz"){document.body.classList.remove("cover");heroVideo(false)}
+  window.scrollTo(0,0);
+}
+
+/* menu */
+let lastFocus=null;
+function openMenu(target){
+  lastFocus=document.activeElement;
+  const m=$("menu");m.classList.add("open");m.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";$("xclose").focus();
+  if(target){const t=$(target);if(t)t.scrollIntoView({block:"start"})}else m.scrollTop=0;
+}
+function closeMenu(){
+  const m=$("menu");m.classList.remove("open");m.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";if(lastFocus&&lastFocus.focus)lastFocus.focus();
+}
+document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openMenu(b.dataset.open)));
+$("burger").onclick=()=>openMenu();
+$("xclose").onclick=closeMenu;
+$("menu").addEventListener("click",e=>{if(e.target===$("menu"))closeMenu()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("menu").classList.contains("open"))closeMenu()});
+
+/* quiz */
+function begin(){
+  i=0;busy=false;started=false;ans=D.map(()=>null);
+  const flip=D.map((_,k)=>k%2===0);for(let k=flip.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[flip[k],flip[j]]=[flip[j],flip[k]]}
+  // metade das perguntas com cada ordem, embaralhadas
+  ord=D.map((_,k)=>flip[k]?[0,1]:[1,0]);
+  show("quiz");render(false);
+}
+function render(focus){
+  const q=D[i];
+  const pct=Math.round(i/D.length*100);
+  $("fill").style.width=pct+"%";$("prog").setAttribute("aria-valuenow",pct);
+  $("count").textContent=(i+1)+" de "+D.length;
+  const cover=i===0;
+  document.body.classList.toggle("cover",cover);heroVideo(cover);
+  $("tema").textContent=cover?"Duas propostas. Sem nomes. Você escolhe.":q.tema;
+  $("tema").classList.toggle("intro",cover);
+  $("pergunta").textContent=q.p;
+  const box=$("opts");box.innerHTML="";
+  ord[i].forEach((side,pos)=>{
+    const b=document.createElement("button");b.type="button";
+    b.className="opt"+(ans[i]===side?" sel":"");
+    b.setAttribute("aria-label","Proposta "+"AB"[pos]+": "+q.s[side].t);
+    const l=document.createElement("span");l.className="l";l.setAttribute("aria-hidden","true");l.textContent="AB"[pos];
+    b.append(l,document.createTextNode(q.s[side].t));
+    b.onclick=()=>pick(side,b);box.append(b);
+  });
+  const s=document.createElement("button");s.type="button";
+  s.className="skip"+(ans[i]===-1?" sel":"");
+  s.textContent="Nenhuma das duas / Não sei";
+  s.onclick=()=>pick(-1,s);box.append(s);
+  $("back").style.visibility=i===0?"hidden":"visible";
+  $("live").textContent="Pergunta "+(i+1)+" de "+D.length+": "+q.p;
+  if(focus)$("pergunta").focus({preventScroll:true});
+  fit();
+}
+/* na capa, tudo precisa caber na primeira dobra: reduz a fonte (mín. 16px) antes de rolar */
+function fit(){
+  document.body.classList.remove("tight");
+  if(i===0&&document.documentElement.scrollHeight>innerHeight+1)document.body.classList.add("tight");
+}
+addEventListener("resize",fit);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+function swap(fn){
+  const w=$("qwrap");
+  if(REDUCED){fn();return}
+  w.classList.add("leave");
+  setTimeout(()=>{fn();w.classList.remove("leave");w.classList.remove("enter");void w.offsetWidth;w.classList.add("enter");window.scrollTo(0,0)},150);
+}
+function pick(v,el){
+  if(busy)return;busy=true;
+  if(!started){started=true;send({t:"inicio"})}
+  ans[i]=v;
+  document.querySelectorAll("#opts .sel").forEach(n=>n.classList.remove("sel"));
+  el.classList.add("sel");
+  setTimeout(()=>{
+    if(i<D.length-1){swap(()=>{i++;render(true);busy=false})}
+    else{finish();busy=false}
+  },REDUCED?0:260);
+}
+$("back").onclick=()=>{if(i>0&&!busy)swap(()=>{i--;render(true)})};
+
+function esc(t){const d=document.createElement("div");d.textContent=t;return d.innerHTML}
+function finish(){
+  const c={L:0,F:0};
+  D.forEach((q,k)=>{const a=ans[k];if(a===0||a===1){c[dec(q.w)[a]]++}});
+  const tot=c.L+c.F;
+  send({t:"fim",a:D.map((q,k)=>{const a=ans[k];return a===0||a===1?dec(q.w)[a]:"S"}).join("")});
+  const R=$("resumo");R.innerHTML="";
+  if(!tot){R.innerHTML='<div class="card">Você respondeu "Não sei" em todas. Sem escolhas, não há afinidade para calcular.</div>'}
+  else{
+    ["L","F"].forEach(k=>{
+      const p=Math.round(c[k]/tot*100);
+      R.insertAdjacentHTML("beforeend",'<div class="card"><div class="nm">'+esc(dec(N[k]))+'</div><div class="big"><span>'+c[k]+' de '+tot+' escolhas</span><b>'+p+'%</b></div><div class="track"><i data-w="'+p+'"></i></div></div>');
+    });
+    if(c.L===c.F)R.insertAdjacentHTML("beforeend",'<p class="note">Empate: suas escolhas se dividiram igualmente.</p>');
+  }
+  const Lw=$("lista");Lw.innerHTML="";
+  D.forEach((q,k)=>{
+    const w=dec(q.w),a=ans[k];
+    let h='<div class="item"><div class="q">'+(k+1)+'. '+esc(q.tema)+'</div>';
+    [0,1].forEach(s=>{
+      const links=JSON.parse(dec(q.s[s].f)).map(f=>'<a href="'+f[1]+'" target="_blank" rel="noopener">'+esc(f[0])+'</a>').join(" · ");
+      h+='<div class="side'+(a===s?' me':'')+'"><div class="who"><span>'+esc(dec(N[w[s]]))+'</span>'+(a===s?'<em>sua escolha</em>':'')+'</div><p>'+esc(q.s[s].t)+'</p><small>Fontes: '+links+'</small></div>';
+    });
+    if(a===-1)h+='<div class="sk">Você marcou: Nenhuma das duas / Não sei</div>';
+    Lw.insertAdjacentHTML("beforeend",h+'</div>');
+  });
+  $("fill").style.width="100%";
+  show("fim");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll(".track i").forEach(b=>b.style.width=b.dataset.w+"%")));
+  $("rtitle").focus({preventScroll:true});
+}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2200)}
+async function share(){
+  const d={title:"Quiz: vote pelas ideias, não pelo rótulo",text:"Escolha entre propostas de governo sem saber de quem são.",url:URL_Q};
+  try{if(navigator.share){await navigator.share(d);return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(URL_Q);toast("Link copiado")}catch(e){prompt("Copie o link:",URL_Q)}
+}
+$("redo").onclick=()=>{$("resumo").innerHTML="";begin()};
+["tema","pergunta","opts"].forEach(id=>$(id).addEventListener("animationend",e=>{if(e.target.id===id)e.target.classList.remove("rise","d1","d2","d3");fit()}));
+begin(); // a capa é a pergunta 1
+$("share1").onclick=share;
+</script>
+</body>
+</html>
