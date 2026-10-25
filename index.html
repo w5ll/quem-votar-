@@ -55,6 +55,7 @@ a{color:var(--nav);text-decoration:underline;text-underline-offset:3px}
   background:#fff;color:#050505;font-weight:500;font-size:17px;transition:transform .2s var(--ease),opacity .2s}
 .pill:active{transform:scale(.98)}
 .ghost{display:inline-flex;align-items:center;min-height:52px;padding:0 6px;color:var(--ink);font-weight:500;font-size:17px;opacity:.9}
+a.ghost{text-decoration:none;color:var(--ink)}
 .ghost.line{border:1px solid var(--line);border-radius:999px;padding:0 24px;justify-content:center}
 
 @media(hover:hover){
@@ -140,8 +141,15 @@ h1 span{display:block}
 .side small{display:block;color:var(--det);font-size:14px;line-height:1.7}
 .item .sk{color:var(--det);font-size:14px;margin-top:10px}
 .aviso{color:var(--det);font-size:14px;line-height:1.6;margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}
+.sheet{position:fixed;inset:0;z-index:70;background:rgba(5,5,5,.7);display:flex;align-items:flex-end;justify-content:center}
+.sheetin{width:100%;max-width:560px;background:#0e0e0e;border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
+  padding:22px calc(20px + var(--pr)) calc(24px + var(--pb)) calc(20px + var(--pl))}
+.sheettitle{margin:0 0 4px;font-weight:500;font-size:20px}
+.sheetsub{margin:0 0 16px;color:var(--sec);font-size:16px}
+.shareurl{width:100%;min-height:52px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:var(--fill);color:var(--ink);font:inherit;font-size:16px}
+.sheetbtns{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:16px}
 #toast{position:fixed;left:50%;bottom:calc(24px + var(--pb));transform:translate(-50%,20px);background:#fff;color:#050505;font-weight:500;
-  padding:12px 20px;border-radius:999px;font-size:16px;opacity:0;pointer-events:none;transition:all .3s var(--ease);z-index:60}
+  padding:12px 20px;border-radius:999px;font-size:16px;opacity:0;pointer-events:none;transition:all .3s var(--ease);z-index:90}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 
 @media(prefers-reduced-motion:reduce){
@@ -232,6 +240,19 @@ h1 span{display:block}
     <p class="aviso">Este quiz não é recomendação de voto. Pesquise e decida por conta própria. As propostas foram resumidas e generalizadas; para o texto completo, consulte os planos de governo registrados no <a href="https://www.tse.jus.br/eleicoes/eleicoes-2026-content/propostas-de-governo-dos-candidatos-ao-cargo-de-presidente-da-republica-eleicoes-2026-segundo-turno" target="_blank" rel="noopener">TSE</a>. Suas escolhas foram contadas de forma anônima, sem identificar você.</p>
   </div>
 </section>
+
+<div id="sharebox" class="sheet" role="dialog" aria-modal="true" aria-label="Compartilhar o quiz" hidden>
+  <div class="sheetin">
+    <p class="sheettitle">Compartilhar o quiz</p>
+    <p class="sheetsub">Este link abre o quiz do zero. Seu resultado não é compartilhado.</p>
+    <input id="shareurl" class="shareurl" type="text" readonly value="" aria-label="Link do quiz">
+    <div class="sheetbtns">
+      <button class="pill" id="sharecopy" type="button">Copiar link</button>
+      <a class="ghost line" id="sharewa" href="#" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+      <button class="ghost" id="shareclose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
 
 <div id="toast" role="status"></div>
 
@@ -362,11 +383,46 @@ function finish(){
   $("rtitle").focus({preventScroll:true});
 }
 function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2200)}
-async function share(){
-  const d={title:"Quiz: vote pelas ideias, não pelo rótulo",text:"Escolha entre propostas de governo sem saber de quem são.",url:URL_Q};
-  try{if(navigator.share){await navigator.share(d);return}}catch(e){if(e&&e.name==="AbortError")return}
-  try{await navigator.clipboard.writeText(URL_Q);toast("Link copiado")}catch(e){prompt("Copie o link:",URL_Q)}
+
+/* compartilhar: só o link do quiz, nunca o resultado */
+const SHARE_TEXT="Escolha entre propostas de governo sem saber de quem são.";
+function copyText(t){
+  return new Promise(res=>{
+    const legacy=()=>{
+      try{
+        const ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");
+        ta.style.cssText="position:fixed;top:0;left:0;opacity:0";document.body.appendChild(ta);
+        ta.focus();ta.select();ta.setSelectionRange(0,t.length);
+        const ok=document.execCommand("copy");document.body.removeChild(ta);res(!!ok);
+      }catch(e){res(false)}
+    };
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>res(true),legacy)}else legacy();
+  });
 }
+let shareFocus=null;
+function openShare(){
+  shareFocus=document.activeElement;
+  $("shareurl").value=URL_Q;
+  $("sharewa").href="https://wa.me/?text="+encodeURIComponent(SHARE_TEXT+" "+URL_Q);
+  $("sharebox").hidden=false;
+  const f=$("shareurl");f.focus();try{f.select();f.setSelectionRange(0,URL_Q.length)}catch(e){}
+}
+function closeShare(){$("sharebox").hidden=true;if(shareFocus&&shareFocus.focus)shareFocus.focus()}
+async function share(){
+  if(navigator.share){
+    try{await navigator.share({title:"Quiz: vote pelas ideias, não pelo rótulo",text:SHARE_TEXT,url:URL_Q});return}
+    catch(e){if(e&&e.name==="AbortError")return}
+  }
+  openShare(); // sem compartilhar nativo (ex.: navegador interno): mostra o link, copiar e WhatsApp
+}
+$("sharecopy").onclick=async()=>{
+  if(await copyText(URL_Q)){toast("Link copiado")}
+  else{const f=$("shareurl");f.focus();try{f.select();f.setSelectionRange(0,URL_Q.length)}catch(e){}toast("Toque e segure para copiar")}
+};
+$("shareclose").onclick=closeShare;
+$("sharebox").addEventListener("click",e=>{if(e.target===$("sharebox"))closeShare()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sharebox").hidden)closeShare()});
+$("share1").onclick=share;
 $("start").onclick=startQuiz;
 $("redo").onclick=()=>{$("resumo").innerHTML="";reset();show("home")};
 reset();show("home"); // abre na home
