@@ -53,55 +53,35 @@ a{color:var(--nav);text-decoration:underline;text-underline-offset:3px}
 /* botões */
 .pill{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:999px;
   background:#fff;color:#050505;font-weight:500;font-size:17px;transition:transform .2s var(--ease),opacity .2s}
-.pill:hover{opacity:.9}.pill:active{transform:scale(.98)}
+.pill:active{transform:scale(.98)}
 .ghost{display:inline-flex;align-items:center;min-height:52px;padding:0 6px;color:var(--ink);font-weight:500;font-size:17px;opacity:.9}
-.ghost:hover{opacity:1}
 .ghost.line{border:1px solid var(--line);border-radius:999px;padding:0 24px;justify-content:center}
 
-/* ===== CAPA: pergunta 1 sobre o vídeo ===== */
-.stage{position:fixed;inset:0;z-index:0;overflow:hidden;display:none;background:var(--bg)}
-body.cover .stage{display:block}
-.vwrap{position:absolute;inset:0}
-.vwrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:43% center;opacity:0;transition:opacity 1.2s var(--ease)}
-.vwrap video.on{opacity:1}
-.vshade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(5,5,5,0) 58%,#050505 97%),linear-gradient(rgba(5,5,5,.62),rgba(5,5,5,.62))}
-.top{display:none;position:relative;grid-template-columns:1fr auto;align-items:center;min-height:56px}
-body.cover .top{display:grid}
+@media(hover:hover){
+  .pill:hover{opacity:.9}
+  .ghost:hover{opacity:1}
+  .back:hover{color:#fff}
+  .opt:hover{border-color:rgba(255,255,255,.4)}
+  .skip:hover{color:#fff;border-color:var(--line)}
+}
+
+/* ===== HOME ===== */
+.top{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;min-height:56px}
 .logo{display:block;width:24px;height:37px}
-.toplink{display:none;color:var(--nav);font-size:19px}
-.toplink:hover{color:#fff}
 .burger{justify-self:end;width:48px;height:48px;border-radius:999px;background:rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
 .burger i{display:block;width:18px;height:1.5px;background:#fff;border-radius:1px}
-body.cover #quiz .col{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
-body.cover #qwrap{margin:auto 0}
-body.cover .tema{margin-top:8px}
-.tema.intro{color:var(--sec)}
-.coverfoot{display:none}
-.priv{display:none}
-body.cover .priv:not(:empty){display:block}
-body.cover .coverfoot{display:block}
-body.cover .qfoot{margin-top:22px}
-body.cover .qfoot+.qfoot{margin-top:8px}
-body.tight .opt{font-size:16px;padding:14px 18px;min-height:56px;margin-bottom:10px}
-body.tight #pergunta{font-size:clamp(24px,6.4vw,32px);margin-bottom:18px}
-body.tight .top{min-height:44px}
-body.tight .qbar{min-height:40px;margin-top:0}
-body.tight .tema{margin-bottom:6px}
-body.tight .opt .l{margin-bottom:4px}
-body.tight .skip{min-height:48px;margin-top:0}
-body.tight.cover .qfoot{margin-top:12px}
-@media(min-width:900px){
-  .vwrap{transform:translateX(30vw);
-    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%);
-    mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%)}
-  .vwrap video{object-position:center}
-  .toplink{display:block;justify-self:end}
-  .burger{display:none}
-  .logo{width:28px;height:43px}
-}
+#home .col{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;max-width:560px}
+.homein{margin:auto 0;padding:28px 0}
+h1{margin:0 0 18px;font-weight:400;letter-spacing:.3px;line-height:1.06;font-size:clamp(40px,11vw,64px);text-wrap:balance}
+h1 span{display:block}
+.sub{margin:0 0 30px;color:var(--sec);font-size:clamp(17px,4.4vw,20px);max-width:28em}
+.cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.homefoot{color:var(--det);font-size:14px;margin:0 0 8px}
+#home .qfoot{margin-top:8px}
+.priv:empty{display:none}
+@media(min-width:900px){.logo{width:28px;height:43px}}
 
 /* menu em tela cheia */
 #menu{position:fixed;inset:0;z-index:50;background:rgba(5,5,5,.97);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
@@ -127,19 +107,16 @@ body.tight.cover .qfoot{margin-top:12px}
 #prog i{display:block;height:100%;width:0;background:#fff;transition:width .4s var(--ease)}
 .qbar{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin-top:6px}
 .back{color:var(--det);font-size:16px;min-height:48px;padding:0 12px 0 0}
-.back:hover{color:#fff}
 .count{color:var(--det);font-size:16px}
 .tema{color:var(--det);font-size:16px;margin:28px 0 10px;letter-spacing:.02em}
 #pergunta{font-weight:500;font-size:clamp(25px,6.6vw,34px);line-height:1.22;margin:0 0 26px;letter-spacing:.1px}
 .opt{display:block;width:100%;text-align:left;min-height:64px;padding:18px 20px;margin-bottom:14px;
   border:1px solid var(--line);background:var(--fill);border-radius:16px;font-size:18px;line-height:1.5;
   transition:border-color .2s var(--ease),background .2s var(--ease)}
-.opt:hover{border-color:rgba(255,255,255,.4)}
 .opt .l{display:block;color:var(--det);font-size:14px;font-weight:700;letter-spacing:.14em;margin-bottom:8px}
 .opt.sel{border-color:#fff;background:rgba(255,255,255,.07)}
 .skip{display:flex;align-items:center;justify-content:center;min-height:52px;margin:6px auto 0;padding:0 24px;border-radius:999px;
   color:var(--sec);border:1px solid transparent;font-size:16px}
-.skip:hover{color:#fff;border-color:var(--line)}
 .skip.sel{color:#fff;border-color:#fff}
 .qfoot{color:var(--det);font-size:14px;margin-top:36px}
 
@@ -176,21 +153,35 @@ body.tight.cover .qfoot{margin-top:12px}
 
 <div id="live" class="sr" aria-live="polite" aria-atomic="true"></div>
 
-<!-- VÍDEO DE FUNDO (só na pergunta 1) -->
-<div class="stage" id="stage" aria-hidden="true">
-  <div class="vwrap">
-    <video id="vid" autoplay muted loop playsinline preload="metadata" tabindex="-1"
-      poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%23050505'/%3E%3C/svg%3E">
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4" type="video/mp4">
-    </video>
-    <script>
-    // Sem vídeo em economia de dados ou movimento reduzido: só o fundo preto.
-    (function(){var c=navigator.connection||{},r=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if(c.saveData||r){var v=document.getElementById("vid");if(v&&v.parentNode)v.parentNode.removeChild(v)}})();
-    </script>
+<!-- HOME -->
+<section id="home" class="screen" aria-label="Início">
+  <div class="col">
+    <header class="top">
+      <svg class="logo" viewBox="0 0 31.5 48.5" role="img" aria-label="Em quem votar?" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="bg1" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="34.1" y2="28.9">
+          <stop offset="0" stop-color="#9e9e9e"/><stop offset=".28" stop-color="#a6a6a6"/><stop offset=".34" stop-color="#a3a3a3"/>
+          <stop offset=".40" stop-color="#3a3a3a"/><stop offset=".55" stop-color="#414141"/><stop offset=".60" stop-color="#7a7a7a"/>
+          <stop offset=".68" stop-color="#8e8e8e"/><stop offset=".80" stop-color="#a9a9a9"/><stop offset=".95" stop-color="#c4c4c4"/>
+          <stop offset="1" stop-color="#ccc"/></linearGradient></defs>
+        <path d="M21.5 0 L21.5 19.5 L31.5 19.5 L31.5 29 L10 48.5 L10 28.5 L0.5 28.5 L0.5 18.5 Z" fill="url(#bg1)"/>
+        <rect x="0.5" y="18.5" width="9" height="10" fill="#fdfdfd"/>
+        <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd"/>
+      </svg>
+      <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-haspopup="dialog" aria-controls="menu"><i></i><i></i></button>
+    </header>
+    <div class="homein">
+      <h1 class="rise d1"><span>Escolha pelas ideias,</span> <span>não pelo rótulo.</span></h1>
+      <p class="sub rise d2">Duas propostas por vez, sem nomes. No final, você descobre quem propôs o quê.</p>
+      <div class="cta rise d3">
+        <button class="pill" id="start" type="button">Começar o quiz</button>
+        <button class="ghost" type="button" data-open="como">Como funciona</button>
+      </div>
+    </div>
+    <p class="homefoot"><span id="nq"></span> perguntas · ~3 min</p>
+    <p class="qfoot">Este quiz não é recomendação de voto. Pesquise e decida por conta própria.</p>
+    <p class="qfoot priv">Sem login e sem cookies. Suas escolhas são contadas de forma anônima, sem nome, IP ou identificação.</p>
   </div>
-  <div class="vshade"></div>
-</div>
+</section>
 
 <!-- MENU -->
 <div id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
@@ -209,36 +200,20 @@ body.tight.cover .qfoot{margin-top:12px}
   </div>
 </div>
 
-<!-- PERGUNTAS (a pergunta 1 é a capa) -->
-<section id="quiz" class="screen" aria-label="Quiz">
+<!-- PERGUNTAS -->
+<section id="quiz" class="screen" hidden aria-label="Quiz">
   <div id="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
   <div class="col">
-    <header class="top">
-      <svg class="logo" viewBox="0 0 31.5 48.5" role="img" aria-label="Em quem votar?" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="bg1" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="34.1" y2="28.9">
-          <stop offset="0" stop-color="#9e9e9e"/><stop offset=".28" stop-color="#a6a6a6"/><stop offset=".34" stop-color="#a3a3a3"/>
-          <stop offset=".40" stop-color="#3a3a3a"/><stop offset=".55" stop-color="#414141"/><stop offset=".60" stop-color="#7a7a7a"/>
-          <stop offset=".68" stop-color="#8e8e8e"/><stop offset=".80" stop-color="#a9a9a9"/><stop offset=".95" stop-color="#c4c4c4"/>
-          <stop offset="1" stop-color="#ccc"/></linearGradient></defs>
-        <path d="M21.5 0 L21.5 19.5 L31.5 19.5 L31.5 29 L10 48.5 L10 28.5 L0.5 28.5 L0.5 18.5 Z" fill="url(#bg1)"/>
-        <rect x="0.5" y="18.5" width="9" height="10" fill="#fdfdfd"/>
-        <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd"/>
-      </svg>
-      <button class="toplink" id="toplink" type="button" data-open="como">Como funciona</button>
-      <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-haspopup="dialog" aria-controls="menu"><i></i><i></i></button>
-    </header>
     <div class="qbar">
       <button class="back" id="back" type="button" aria-label="Voltar para a pergunta anterior">← Voltar</button>
       <span class="count" id="count"></span>
     </div>
     <div id="qwrap">
-      <p class="tema rise d1" id="tema"></p>
-      <h2 id="pergunta" class="rise d2" tabindex="-1"></h2>
-      <div id="opts" class="rise d3"></div>
+      <p class="tema" id="tema"></p>
+      <h2 id="pergunta" tabindex="-1"></h2>
+      <div id="opts"></div>
     </div>
-    <p class="qfoot coverfoot"><span id="nq"></span> perguntas · ~3 min · só no fim você vê quem propôs o quê</p>
     <p class="qfoot">Este quiz não é recomendação de voto. Pesquise e decida por conta própria.</p>
-    <p class="qfoot priv">Sem login e sem cookies. Suas escolhas são contadas de forma anônima, sem nome, IP ou identificação.</p>
   </div>
 </section>
 
@@ -276,19 +251,9 @@ function send(o){
 }
 $("nq").textContent=D.length;
 
-/* vídeo: só na abertura */
-const vid=$("vid");
-if(vid){
-  const on=()=>vid.classList.add("on");
-  vid.addEventListener("playing",on);vid.addEventListener("loadeddata",on);
-  vid.addEventListener("error",()=>vid.remove());
-}
-function heroVideo(play){if(!vid||!vid.isConnected)return;try{play?vid.play&&vid.play().catch(()=>{}):vid.pause()}catch(e){}}
-
 function show(id){
-  ["quiz","fim"].forEach(x=>$(x).hidden=x!==id);
+  ["home","quiz","fim"].forEach(x=>$(x).hidden=x!==id);
   $("prog").style.display=id==="quiz"?"block":"none";
-  if(id!=="quiz"){document.body.classList.remove("cover");heroVideo(false)}
   window.scrollTo(0,0);
 }
 
@@ -311,22 +276,23 @@ $("menu").addEventListener("click",e=>{if(e.target===$("menu"))closeMenu()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("menu").classList.contains("open"))closeMenu()});
 
 /* quiz */
-function begin(){
+function reset(){
   i=0;busy=false;started=false;ans=D.map(()=>null);
   const flip=D.map((_,k)=>k%2===0);for(let k=flip.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[flip[k],flip[j]]=[flip[j],flip[k]]}
   // metade das perguntas com cada ordem, embaralhadas
   ord=D.map((_,k)=>flip[k]?[0,1]:[1,0]);
-  show("quiz");render(false);
+}
+function startQuiz(){
+  i=0;busy=false;
+  show("quiz");render(true);
+  const w=$("qwrap");w.classList.remove("enter");void w.offsetWidth;w.classList.add("enter");
 }
 function render(focus){
   const q=D[i];
   const pct=Math.round(i/D.length*100);
   $("fill").style.width=pct+"%";$("prog").setAttribute("aria-valuenow",pct);
   $("count").textContent=(i+1)+" de "+D.length;
-  const cover=i===0;
-  document.body.classList.toggle("cover",cover);heroVideo(cover);
-  $("tema").textContent=cover?"Duas propostas. Sem nomes. Você escolhe.":q.tema;
-  $("tema").classList.toggle("intro",cover);
+  $("tema").textContent=q.tema;
   $("pergunta").textContent=q.p;
   const box=$("opts");box.innerHTML="";
   ord[i].forEach((side,pos)=>{
@@ -344,15 +310,7 @@ function render(focus){
   $("back").style.visibility=i===0?"hidden":"visible";
   $("live").textContent="Pergunta "+(i+1)+" de "+D.length+": "+q.p;
   if(focus)$("pergunta").focus({preventScroll:true});
-  fit();
 }
-/* na capa, tudo precisa caber na primeira dobra: reduz a fonte (mín. 16px) antes de rolar */
-function fit(){
-  document.body.classList.remove("tight");
-  if(i===0&&document.documentElement.scrollHeight>innerHeight+1)document.body.classList.add("tight");
-}
-addEventListener("resize",fit);
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
 function swap(fn){
   const w=$("qwrap");
   if(REDUCED){fn();return}
@@ -409,10 +367,9 @@ async function share(){
   try{if(navigator.share){await navigator.share(d);return}}catch(e){if(e&&e.name==="AbortError")return}
   try{await navigator.clipboard.writeText(URL_Q);toast("Link copiado")}catch(e){prompt("Copie o link:",URL_Q)}
 }
-$("redo").onclick=()=>{$("resumo").innerHTML="";begin()};
-["tema","pergunta","opts"].forEach(id=>$(id).addEventListener("animationend",e=>{if(e.target.id===id)e.target.classList.remove("rise","d1","d2","d3");fit()}));
-begin(); // a capa é a pergunta 1
-$("share1").onclick=share;
+$("start").onclick=startQuiz;
+$("redo").onclick=()=>{$("resumo").innerHTML="";reset();show("home")};
+reset();show("home"); // abre na home
 </script>
 </body>
 </html>
